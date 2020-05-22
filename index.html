@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html ng-app="TestApp">
+    <head>
+        <title>Sorting Algorithms visualized!</title>
+        <link href="layout.css" rel = "stylesheet" type = "text/css">
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</script>
+    </head>
+    <body>
+        <div class = "topBar">
+            <div class="center">
+                <button class = "button" id = "randomFillButton">Random Fill</button>
+                <button class = "button" id = "addColumnButton"> Add Column</button>
+                <button class = "button" id = "sortButton"> Sort</button>
+            </div>
+
+        </div>
+
+        <div id = "chartContainer" style="height: 60%; width: 100%;"></div>
+    </body>
+
+</html>
+
+
+
+
+
+
+
+<script type="text/javascript">
+    let chartData = []
+    var chart;
+    function updateChart(){
+        chart.options.data[0].dataPoints = chartData;
+        chart.render();
+    }
+
+
+    function addRow(){
+       var newData = parseInt(prompt("Enter a Value", "0"), 10)
+       chartData.push({label : newData, y : newData, color: "#311adb"});
+       updateChart();
+    }
+
+    function fillRandom(){
+
+    }
+
+    function sort(){
+
+    }
+
+
+
+    window.onload = function () {
+        chart = new CanvasJS.Chart("chartContainer", {
+            title:{
+                text: "Data"              
+            },
+            data: [              
+            {
+                type: "column",
+                dataPoints: chartData
+            }
+            ]
+        });
+        chart.render();
+    }
+
+    document.getElementById('randomFillButton').onclick = function() { fillRandom() };
+    document.getElementById('addColumnButton').onclick = function() { addRow() };
+    document.getElementById('sortButton').onclick = function() { sort() };
+
+</script>
