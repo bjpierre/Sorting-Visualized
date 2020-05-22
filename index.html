@@ -29,34 +29,75 @@
 
 
 <script type="text/javascript">
-    let chartData = []
+    var SortedColor = "#311adb";
+    var UnsortedColor = "#311adb";
+    
+    
+    var chartData = []
     var chart;
+
+    //re renders the chart
+    //Simple now but will be built upon to color
     function updateChart(){
-        chart.options.data[0].dataPoints = chartData;
+        //chart.options.data[0].dataPoints = chartData;
         chart.render();
     }
 
-
+    //allows user to add custom data
+    //Needs upgraded a lot
     function addRow(){
-       var newData = parseInt(prompt("Enter a Value", "0"), 10)
-       chartData.push({label : newData, y : newData, color: "#311adb"});
+       let newData = parseInt(prompt("Enter a Value", "0"), 10)
+       chartData.push({label : chartData.length +1, y : newData, color: UnsortedColor});
        updateChart();
     }
 
+    //Fill list with random values, repeatable
     function fillRandom(){
+        let arraySize = Math.floor(Math.random()*20 + 10);
+        for (let i = 1; i <= arraySize; i++) {
+            let newData = Math.floor(Math.random()*50 + 10);
+            chartData.push({label : i, y : newData, color: UnsortedColor});
+        }
 
+        updateChart();
     }
 
     function sort(){
-
+            //This should handle selecting the algorithim but
+            //for now it just sorts w/ selection
     }
 
+    function selectionSort(){
+    // Step 1 − Set MIN to location 0
+    // Step 2 − Search the minimum element in the list
+    // Step 3 − Swap with value at location MIN
+    // Step 4 − Increment MIN to point to next element
+    // Step 5 − Repeat until list is sorted
+    }
 
 
     window.onload = function () {
         chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            theme: "light2",
             title:{
                 text: "Data"              
+            },
+            axisX:{
+                gridThickness: 0,
+                tickLength: 0,
+                lineThickness: 10,
+                labelFormatter: function(){
+                    return " ";
+                }
+            },
+                axisY:{
+                    gridThickness: 0,
+                    tickLength: 0,
+                    lineThickness: 10,
+                    labelFormatter: function(){
+                        return " ";
+                    }
             },
             data: [              
             {
@@ -68,6 +109,7 @@
         chart.render();
     }
 
+    //Button declarations
     document.getElementById('randomFillButton').onclick = function() { fillRandom() };
     document.getElementById('addColumnButton').onclick = function() { addRow() };
     document.getElementById('sortButton').onclick = function() { sort() };
