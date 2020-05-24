@@ -30,19 +30,20 @@
 
 <script type="text/javascript">
     var SortedColor = "#311adb";
-    var UnsortedColor = "#311adb";
-    
+    var UnsortedColor = "#ff0000";
+    var SelectedColor = "#b3b3cc";
+    var WaitTime = 300;
+
+    var index = 0;
     
     var chartData = []
     var chart;
 
     //re renders the chart
     //Simple now but will be built upon to color
-    function updateChart(){
+    async  function updateChart(){
         chart.options.data[0].dataPoints = chartData;
         chart.render();
-        //sleep(100);
-        console.log("Updated");
     }
 
     //allows user to add custom data
@@ -67,30 +68,33 @@
     function sort(){
             //This should handle selecting the algorithim but
             //for now it just sorts w/ selection
-
             selectionSort();
     }
 
     function selectionSort(){
-        
-        for(let index = 0; index < chartData.length; index ++){
+        if(index < chartData.length){
             let minIndex = index;
             for(var searchIndex = index +1; searchIndex <chartData.length; searchIndex++){
                 if(chartData[searchIndex].y < chartData[minIndex].y){
                     minIndex = searchIndex;
                 }
-                updateChart();
             }
-            let tempValue = chartData[minIndex];
-            chartData[minIndex] = chartData[index];
-            chartData[index] = tempValue;
 
-            chartData[minIndex].x = minIndex;
-            chartData[index].x = index;
-            
-            //sleep(50);
+            chartData[minIndex].color = SelectedColor;
+            chart.render();
+            sleep(WaitTime/2);
+
+            let tempValue = chartData[minIndex];
+            chartData[minIndex] = {label : chartData[index].label, y : chartData[index].y, color: UnsortedColor, x : minIndex};
+            chartData[index] =  {label : tempValue.label, y : tempValue.y, color: SortedColor, x : index};
+
+            sleep(WaitTime/2);
+            index++;
+        }else{
+            chart.render();
+            clearInterval(sorter);
+            index=0;
         }
-        console.log(chartData);
     }
 
 
@@ -139,6 +143,7 @@
     //Button declarations
     document.getElementById('randomFillButton').onclick = function() { fillRandom() };
     document.getElementById('addColumnButton').onclick = function() { addRow() };
-    document.getElementById('sortButton').onclick = function() { sort() };
+    //Don't like this but chart.render seems to need flushing or something so this is how it goes.
+    document.getElementById('sortButton').onclick = function() { sorter = setInterval(sort),2000};
 
 </script>
